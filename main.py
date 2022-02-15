@@ -32,7 +32,9 @@ goods_list = json.loads(response.text).get('data').get('goodsList')
 
 print(len(goods_list))
 
-concern_goods_list = ['爱奇艺黄金VIP（月卡）', '腾讯视频会员（月卡）']
+concern_goods_list = ['爱奇艺', '腾讯视频']
+
+
 # concern_goods_list = ['简单心理']
 
 
@@ -53,8 +55,15 @@ def lark_notify(content):
     requests.post(larkapi, json=a)
 
 
+def isConcern(n):
+    for t in concern_goods_list:
+        if t in n:
+            return True
+    return False
+
+
 for goods in goods_list:
-    if goods['name'] in concern_goods_list and goods['stock'] > 0:
+    if isConcern(goods['name']) and goods['stock'] > 0:
         print(goods)
         text = "{}:{}个".format(goods['name'], goods['stock'])
         lark_notify(text)
